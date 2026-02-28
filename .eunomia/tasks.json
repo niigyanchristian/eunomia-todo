@@ -5,17 +5,15 @@
       "task_id": "REQ-001",
       "task_type": "modify",
       "recommended_model": "sonnet",
-      "title": "Implement GET /api/todos endpoint with filtering",
-      "description": "Add a GET /api/todos endpoint to backend/src/index.js that lists all todos with optional filtering.\n\n**Implementation Requirements:**\n1. Import the database instance from ./db.js (already exists)\n2. Add the endpoint after the existing /api/health route (line 22)\n3. Implement query parameter filtering:\n   - No params: Return all todos\n   - ?status=active: Filter where completed = 0\n   - ?status=completed: Filter where completed = 1\n4. Order results by created_at DESC\n5. Return JSON array of todo objects\n6. Handle database errors with 500 status and error message\n\n**Test Requirements:**\nCreate backend/src/todos.test.js following the pattern in backend/src/db.test.js:\n1. Test GET /api/todos returns all todos\n2. Test ?status=active filter returns only incomplete todos (completed=0)\n3. Test ?status=completed filter returns only completed todos (completed=1)\n4. Test results are ordered by created_at DESC\n5. Test invalid status values are handled gracefully\n6. Clean up test data after each test\n\n**Reference Files:**\n- backend/src/index.js (modify this file to add the route)\n- backend/src/db.js (import db from here)\n- backend/src/db.test.js (follow this test pattern)",
+      "title": "Implement POST /api/todos endpoint with validation",
+      "description": "Add a POST /api/todos endpoint to backend/src/index.js that creates new todo items.\n\n**Implementation Requirements:**\n1. Read backend/src/index.js and backend/src/db.js to understand the existing Express setup and database schema\n2. Add POST /api/todos route after the existing GET /api/todos route (around line 51)\n3. Extract { title, description } from req.body\n4. Validate:\n   - title must be present (return 400 with error message if missing)\n   - title must be max 200 characters (return 400 with error message if too long)\n5. Insert new todo using db.prepare() with SQL: INSERT INTO todos (title, description) VALUES (?, ?)\n6. Return 201 status with the created todo object (query it back using lastInsertRowid)\n7. Handle database errors with 500 status\n\n**Write tests:**\nCreate backend/src/post-todos.test.js following the pattern in backend/src/todos.test.js. Test cases:\n- POST with valid title and description returns 201 with created todo\n- POST with valid title only (no description) returns 201\n- POST with missing title returns 400\n- POST with title > 200 chars returns 400\n- Verify created todo has all fields (id, title, description, completed, created_at, updated_at)\n- Clean up test data after tests run\n\nUse the db instance directly for testing (similar to todos.test.js).",
       "dependencies": [],
       "acceptance_criteria": [
-        "GET /api/todos endpoint returns JSON array of all todos",
-        "?status=active filter returns only todos where completed=0",
-        "?status=completed filter returns only todos where completed=1",
-        "Results ordered by created_at DESC",
-        "Database errors return 500 status with error message",
-        "Test file backend/src/todos.test.js exists with comprehensive tests",
-        "All tests pass when run with node backend/src/todos.test.js"
+        "POST /api/todos with valid data returns 201 with created todo object",
+        "POST /api/todos without title returns 400",
+        "POST /api/todos with title > 200 chars returns 400",
+        "Created todo has all required fields",
+        "Test file backend/src/post-todos.test.js exists with all test cases"
       ],
       "filename": "backend/src/index.js",
       "language": "javascript"
@@ -24,15 +22,15 @@
       "task_id": "QA-001",
       "task_type": "qa_validation",
       "recommended_model": "haiku",
-      "title": "Validate GET /api/todos endpoint tests",
-      "description": "Run the test suite for the GET /api/todos endpoint to validate implementation.\n\n**Validation Steps:**\n1. Run: node backend/src/todos.test.js\n2. Verify all test cases pass:\n   - GET /api/todos returns all todos\n   - ?status=active filtering works correctly\n   - ?status=completed filtering works correctly\n   - Results are ordered by created_at DESC\n   - Edge cases handled properly\n3. Optionally start the server (npm run dev in backend/) and test manually with curl or browser\n4. Verify no errors in console output\n\n**Test File:** backend/src/todos.test.js",
+      "title": "Validate POST /api/todos endpoint tests",
+      "description": "Run the test suite for the POST /api/todos endpoint to validate implementation.\n\n**Validation Steps:**\n1. Run: node backend/src/post-todos.test.js\n2. Verify all test cases pass:\n   - POST with valid title and description returns 201\n   - POST with valid title only returns 201\n   - POST with missing title returns 400\n   - POST with title > 200 chars returns 400\n   - Created todos have all required fields\n   - Test data is cleaned up\n3. All tests should pass with green checkmarks\n4. No database errors or uncaught exceptions",
       "dependencies": ["REQ-001"],
       "acceptance_criteria": [
-        "All tests in backend/src/todos.test.js pass",
-        "No console errors during test execution",
-        "Test output shows clear pass/fail indicators"
+        "All POST /api/todos tests pass",
+        "No errors or warnings in test output",
+        "Test cleanup executes successfully"
       ],
-      "filename": "backend/src/todos.test.js",
+      "filename": "backend/src/post-todos.test.js",
       "language": "javascript"
     }
   ]
