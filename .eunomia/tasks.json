@@ -2,37 +2,36 @@
   "project_name": "eunomia-todo",
   "tasks": [
     {
-      "task_id": "SETUP-001",
-      "task_type": "infrastructure",
-      "recommended_model": "haiku",
-      "title": "Initialize monorepo project structure",
-      "description": "Set up the monorepo structure with backend/ and frontend/ directories.\n\n**Backend Setup:**\n- Create backend/ directory\n- Initialize Node.js + Express project with package.json\n- Include express, cors, and other essential dependencies\n- Create basic server structure (src/index.js or similar)\n\n**Frontend Setup:**\n- Create frontend/ directory\n- Initialize React + Vite project with package.json\n- Include react, react-dom, vite dependencies\n- Set up basic Vite configuration\n\n**Root Files:**\n- Create root README.md with setup instructions for both backend and frontend\n- Include commands to install dependencies and run both projects\n- Document the monorepo structure\n\n**Gitignore:**\n- Create .gitignore at root level\n- Exclude node_modules, dist, *.db\n- Include common IDE and OS files",
+      "task_id": "DB-001",
+      "task_type": "feature",
+      "recommended_model": "sonnet",
+      "title": "Set up SQLite database with better-sqlite3",
+      "description": "Add better-sqlite3 to backend/package.json dependencies. Create backend/src/db.js that: (1) imports better-sqlite3, (2) creates/opens a database file at backend/todos.db, (3) creates a todos table with schema: id (INTEGER PRIMARY KEY AUTOINCREMENT), title (TEXT NOT NULL), description (TEXT DEFAULT ''), completed (BOOLEAN DEFAULT 0), created_at (DATETIME DEFAULT CURRENT_TIMESTAMP), updated_at (DATETIME DEFAULT CURRENT_TIMESTAMP), (4) exports a db instance as the default export. The database file should be auto-created on first run. Also write a basic test file backend/src/db.test.js that validates the database connection and table creation.",
       "dependencies": [],
       "acceptance_criteria": [
-        "backend/ directory exists with valid package.json",
-        "frontend/ directory exists with valid package.json",
-        "Root README.md contains setup instructions",
-        ".gitignore excludes node_modules, dist, and *.db files",
-        "Both projects can install dependencies successfully"
+        "better-sqlite3 added to backend/package.json",
+        "backend/src/db.js exists and exports db instance",
+        "todos table created with correct schema",
+        "Database file auto-created on first import",
+        "Test file validates database setup"
       ],
-      "filename": "",
-      "language": "bash"
+      "filename": "backend/src/db.js",
+      "language": "javascript"
     },
     {
       "task_id": "QA-001",
       "task_type": "qa_validation",
       "recommended_model": "haiku",
-      "title": "Validate project structure setup",
-      "description": "Verify that the monorepo structure has been set up correctly.\n\n**Validation Steps:**\n1. Check that backend/package.json exists and is valid JSON\n2. Check that frontend/package.json exists and is valid JSON\n3. Verify README.md exists at root and contains setup instructions\n4. Verify .gitignore exists and includes node_modules, dist, *.db\n5. Attempt to run npm install in both backend/ and frontend/ directories\n6. Verify no errors occur during installation\n\n**Success Criteria:**\nAll files exist in correct locations, package.json files are valid, and dependencies install without errors.",
-      "dependencies": ["SETUP-001"],
+      "title": "Validate SQLite database setup",
+      "description": "Run the database test file to verify that the SQLite database is created correctly with the todos table schema. Verify that backend/src/db.js can be imported without errors and that the database file is created.",
+      "dependencies": ["DB-001"],
       "acceptance_criteria": [
-        "All directory structure validates successfully",
-        "package.json files are valid and parseable",
-        "Dependencies install without errors in both projects",
-        ".gitignore contains required patterns"
+        "Database tests pass successfully",
+        "Database file is created on import",
+        "Todos table exists with correct schema"
       ],
-      "filename": "",
-      "language": "bash"
+      "filename": "backend/src/db.test.js",
+      "language": "javascript"
     }
   ]
 }
