@@ -2,35 +2,37 @@
   "project_name": "eunomia-todo",
   "tasks": [
     {
-      "task_id": "DB-001",
-      "task_type": "feature",
+      "task_id": "REQ-001",
+      "task_type": "modify",
       "recommended_model": "sonnet",
-      "title": "Set up SQLite database with better-sqlite3",
-      "description": "Add better-sqlite3 to backend/package.json dependencies. Create backend/src/db.js that: (1) imports better-sqlite3, (2) creates/opens a database file at backend/todos.db, (3) creates a todos table with schema: id (INTEGER PRIMARY KEY AUTOINCREMENT), title (TEXT NOT NULL), description (TEXT DEFAULT ''), completed (BOOLEAN DEFAULT 0), created_at (DATETIME DEFAULT CURRENT_TIMESTAMP), updated_at (DATETIME DEFAULT CURRENT_TIMESTAMP), (4) exports a db instance as the default export. The database file should be auto-created on first run. Also write a basic test file backend/src/db.test.js that validates the database connection and table creation.",
+      "title": "Implement GET /api/todos endpoint with filtering",
+      "description": "Add a GET /api/todos endpoint to backend/src/index.js that lists all todos with optional filtering.\n\n**Implementation Requirements:**\n1. Import the database instance from ./db.js (already exists)\n2. Add the endpoint after the existing /api/health route (line 22)\n3. Implement query parameter filtering:\n   - No params: Return all todos\n   - ?status=active: Filter where completed = 0\n   - ?status=completed: Filter where completed = 1\n4. Order results by created_at DESC\n5. Return JSON array of todo objects\n6. Handle database errors with 500 status and error message\n\n**Test Requirements:**\nCreate backend/src/todos.test.js following the pattern in backend/src/db.test.js:\n1. Test GET /api/todos returns all todos\n2. Test ?status=active filter returns only incomplete todos (completed=0)\n3. Test ?status=completed filter returns only completed todos (completed=1)\n4. Test results are ordered by created_at DESC\n5. Test invalid status values are handled gracefully\n6. Clean up test data after each test\n\n**Reference Files:**\n- backend/src/index.js (modify this file to add the route)\n- backend/src/db.js (import db from here)\n- backend/src/db.test.js (follow this test pattern)",
       "dependencies": [],
       "acceptance_criteria": [
-        "better-sqlite3 added to backend/package.json",
-        "backend/src/db.js exists and exports db instance",
-        "todos table created with correct schema",
-        "Database file auto-created on first import",
-        "Test file validates database setup"
+        "GET /api/todos endpoint returns JSON array of all todos",
+        "?status=active filter returns only todos where completed=0",
+        "?status=completed filter returns only todos where completed=1",
+        "Results ordered by created_at DESC",
+        "Database errors return 500 status with error message",
+        "Test file backend/src/todos.test.js exists with comprehensive tests",
+        "All tests pass when run with node backend/src/todos.test.js"
       ],
-      "filename": "backend/src/db.js",
+      "filename": "backend/src/index.js",
       "language": "javascript"
     },
     {
       "task_id": "QA-001",
       "task_type": "qa_validation",
       "recommended_model": "haiku",
-      "title": "Validate SQLite database setup",
-      "description": "Run the database test file to verify that the SQLite database is created correctly with the todos table schema. Verify that backend/src/db.js can be imported without errors and that the database file is created.",
-      "dependencies": ["DB-001"],
+      "title": "Validate GET /api/todos endpoint tests",
+      "description": "Run the test suite for the GET /api/todos endpoint to validate implementation.\n\n**Validation Steps:**\n1. Run: node backend/src/todos.test.js\n2. Verify all test cases pass:\n   - GET /api/todos returns all todos\n   - ?status=active filtering works correctly\n   - ?status=completed filtering works correctly\n   - Results are ordered by created_at DESC\n   - Edge cases handled properly\n3. Optionally start the server (npm run dev in backend/) and test manually with curl or browser\n4. Verify no errors in console output\n\n**Test File:** backend/src/todos.test.js",
+      "dependencies": ["REQ-001"],
       "acceptance_criteria": [
-        "Database tests pass successfully",
-        "Database file is created on import",
-        "Todos table exists with correct schema"
+        "All tests in backend/src/todos.test.js pass",
+        "No console errors during test execution",
+        "Test output shows clear pass/fail indicators"
       ],
-      "filename": "backend/src/db.test.js",
+      "filename": "backend/src/todos.test.js",
       "language": "javascript"
     }
   ]
