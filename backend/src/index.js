@@ -50,6 +50,34 @@ app.get('/api/todos', (req, res) => {
   }
 });
 
+app.post('/api/todos', (req, res) => {
+  try {
+    const { title, description } = req.body;
+
+    // Validate title is present
+    if (!title) {
+      return res.status(400).json({ error: 'Title is required' });
+    }
+
+    // Validate title length (max 200 characters)
+    if (title.length > 200) {
+      return res.status(400).json({ error: 'Title must be 200 characters or less' });
+    }
+
+    // Insert new todo
+    const stmt = db.prepare('INSERT INTO todos (title, description) VALUES (?, ?)');
+    const result = stmt.run(title, description || '');
+
+    // Query back the created todo
+    const createdTodo = db.prepare('SELECT * FROM todos WHERE id = ?').get(result.lastInsertRowid);
+
+    res.status(201).json(createdTodo);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
