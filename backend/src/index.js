@@ -50,6 +50,25 @@ app.get('/api/todos', (req, res) => {
   }
 });
 
+app.get('/api/todos/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Fetch todo by ID
+    const todo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id);
+
+    // Return 404 if todo doesn't exist
+    if (!todo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    res.json(todo);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/todos', (req, res) => {
   try {
     const { title, description } = req.body;

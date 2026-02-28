@@ -3,19 +3,20 @@
   "tasks": [
     {
       "task_id": "REQ-001",
-      "task_type": "modify",
+      "task_type": "feature",
       "recommended_model": "sonnet",
-      "title": "Implement GET /api/todos/:id endpoint with 404 handling",
-      "description": "Add a GET /api/todos/:id endpoint to backend/src/index.js that fetches a single todo by ID.\n\n**Implementation Requirements:**\n1. Read backend/src/index.js to understand existing route patterns (lines 25-79)\n2. Add the new route after the existing GET /api/todos endpoint (after line 51)\n3. Extract the id parameter from req.params\n4. Use db.prepare('SELECT * FROM todos WHERE id = ?').get(id) to fetch the todo\n5. Return 404 with { error: 'Todo not found' } if the todo doesn't exist\n6. Return the todo object as JSON with 200 status if found\n7. Handle database errors with 500 status\n\n**Write Tests:**\nCreate backend/src/get-todo-by-id.test.js following the pattern in backend/src/todos.test.js:\n- Test 1: GET /api/todos/:id returns the correct todo object\n- Test 2: GET /api/todos/:id returns 404 for non-existent ID\n- Test 3: Verify returned todo has all required fields (id, title, description, completed, created_at, updated_at)\n- Test 4: Clean up test data after tests\n\nUse the same testing approach as todos.test.js (direct database queries with better-sqlite3).",
+      "title": "Create test suite for GET /api/todos/:id endpoint",
+      "description": "Create a comprehensive test file for the existing GET /api/todos/:id endpoint in backend/src/index.js (lines 53-70).\n\n**Context:**\nThe GET /api/todos/:id endpoint is already implemented and functional. It fetches a single todo by ID and returns 404 if not found.\n\n**Implementation Requirements:**\n1. Create backend/src/get-todo-by-id.test.js following the pattern from backend/src/todos.test.js and backend/src/post-todos.test.js\n2. Import db from './db.js' and { strict as assert } from 'assert'\n3. Write comprehensive test cases covering:\n   - Test 1: GET /api/todos/:id with valid ID returns the correct todo object\n   - Test 2: GET /api/todos/:id with non-existent ID should simulate 404 behavior\n   - Test 3: Verify returned todo has all required fields (id, title, description, completed, created_at, updated_at)\n   - Test 4: Verify returned todo field types are correct\n   - Test 5: Test with numeric ID parameter\n   - Test 6: Clean up test data after tests complete\n4. Follow the existing test pattern: create test todos using db.prepare(), run assertions, clean up with DELETE\n5. Use console.log for test output with ✓ and ✅ symbols\n6. Handle errors with try/catch and cleanup on failure\n7. Structure: function testGetTodoByIdEndpoint() wrapped in try/catch, cleanup in finally block",
       "dependencies": [],
       "acceptance_criteria": [
-        "GET /api/todos/:id returns todo object with 200 status when todo exists",
-        "GET /api/todos/:id returns 404 status with error message when todo not found",
-        "Endpoint handles database errors gracefully with 500 status",
-        "Test file backend/src/get-todo-by-id.test.js exists and covers all scenarios",
-        "All tests pass when run"
+        "Test file backend/src/get-todo-by-id.test.js exists",
+        "All test cases pass when run with node backend/src/get-todo-by-id.test.js",
+        "Tests verify correct todo is returned for valid ID",
+        "Tests verify 404 behavior for non-existent ID",
+        "Tests verify all required fields in returned todo object",
+        "Test data is properly cleaned up after execution"
       ],
-      "filename": "backend/src/index.js",
+      "filename": "backend/src/get-todo-by-id.test.js",
       "language": "javascript"
     },
     {
@@ -23,12 +24,13 @@
       "task_type": "qa_validation",
       "recommended_model": "haiku",
       "title": "Validate GET /api/todos/:id endpoint tests",
-      "description": "Run the test suite for the GET /api/todos/:id endpoint to validate implementation.\n\n**Validation Steps:**\n1. Run: node backend/src/get-todo-by-id.test.js\n2. Verify all test cases pass:\n   - GET /api/todos/:id returns correct todo\n   - GET /api/todos/:id returns 404 for non-existent ID\n   - Returned todo has all required fields\n   - Test data cleanup succeeds\n3. Confirm no errors in test output\n4. Verify the endpoint follows existing patterns in backend/src/index.js",
+      "description": "Run the test suite for the GET /api/todos/:id endpoint to validate the implementation.\n\n**Validation Steps:**\n1. Run: node backend/src/get-todo-by-id.test.js\n2. Verify all test cases pass:\n   - GET /api/todos/:id with valid ID returns correct todo\n   - GET /api/todos/:id with non-existent ID simulates 404\n   - Returned todo has all required fields\n   - Test data cleanup works correctly\n3. Confirm output shows ✅ All tests passed\n4. Verify no error messages in output",
       "dependencies": ["REQ-001"],
       "acceptance_criteria": [
-        "All tests in backend/src/get-todo-by-id.test.js pass",
-        "No errors or warnings in test output",
-        "Endpoint correctly handles both success and 404 cases"
+        "All tests pass successfully",
+        "No error messages in output",
+        "Test suite completes without exceptions",
+        "Test data is cleaned up properly"
       ],
       "filename": "backend/src/get-todo-by-id.test.js",
       "language": "javascript"
