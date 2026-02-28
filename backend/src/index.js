@@ -97,6 +97,63 @@ app.post('/api/todos', (req, res) => {
   }
 });
 
+app.put('/api/todos/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, completed } = req.body;
+
+    // Check if todo exists
+    const existingTodo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id);
+    if (!existingTodo) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    // Validate title if provided
+    if (title !== undefined) {
+      if (title === '') {
+        return res.status(400).json({ error: 'Title cannot be empty' });
+      }
+      if (title.length > 200) {
+        return res.status(400).json({ error: 'Title must be 200 characters or less' });
+      }
+    }
+
+    // Build dynamic UPDATE query for provided fields
+    const updates = [];
+    const params = [];
+
+    if (title !== undefined) {
+      updates.push('title = ?');
+      params.push(title);
+    }
+
+    if (description !== undefined) {
+      updates.push('description = ?');
+      params.push(description);
+    }
+
+    if (completed !== undefined) {
+      updates.push('completed = ?');
+      params.push(completed);
+    }
+
+    // Only execute UPDATE if there are fields to update
+    if (updates.length > 0) {
+      const query = `UPDATE todos SET ${updates.join(', ')} WHERE id = ?`;
+      params.push(id);
+      db.prepare(query).run(...params);
+    }
+
+    // Query back the updated todo
+    const updatedTodo = db.prepare('SELECT * FROM todos WHERE id = ?').get(id);
+
+    res.status(200).json(updatedTodo);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
