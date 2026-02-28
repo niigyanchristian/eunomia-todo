@@ -1,0 +1,38 @@
+{
+  "project_name": "eunomia-todo",
+  "tasks": [
+    {
+      "task_id": "SETUP-001",
+      "task_type": "infrastructure",
+      "recommended_model": "haiku",
+      "title": "Initialize monorepo project structure",
+      "description": "Set up the monorepo structure with backend/ and frontend/ directories.\n\n**Backend Setup:**\n- Create backend/ directory\n- Initialize Node.js + Express project with package.json\n- Include express, cors, and other essential dependencies\n- Create basic server structure (src/index.js or similar)\n\n**Frontend Setup:**\n- Create frontend/ directory\n- Initialize React + Vite project with package.json\n- Include react, react-dom, vite dependencies\n- Set up basic Vite configuration\n\n**Root Files:**\n- Create root README.md with setup instructions for both backend and frontend\n- Include commands to install dependencies and run both projects\n- Document the monorepo structure\n\n**Gitignore:**\n- Create .gitignore at root level\n- Exclude node_modules, dist, *.db\n- Include common IDE and OS files",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "backend/ directory exists with valid package.json",
+        "frontend/ directory exists with valid package.json",
+        "Root README.md contains setup instructions",
+        ".gitignore excludes node_modules, dist, and *.db files",
+        "Both projects can install dependencies successfully"
+      ],
+      "filename": "",
+      "language": "bash"
+    },
+    {
+      "task_id": "QA-001",
+      "task_type": "qa_validation",
+      "recommended_model": "haiku",
+      "title": "Validate project structure setup",
+      "description": "Verify that the monorepo structure has been set up correctly.\n\n**Validation Steps:**\n1. Check that backend/package.json exists and is valid JSON\n2. Check that frontend/package.json exists and is valid JSON\n3. Verify README.md exists at root and contains setup instructions\n4. Verify .gitignore exists and includes node_modules, dist, *.db\n5. Attempt to run npm install in both backend/ and frontend/ directories\n6. Verify no errors occur during installation\n\n**Success Criteria:**\nAll files exist in correct locations, package.json files are valid, and dependencies install without errors.",
+      "dependencies": ["SETUP-001"],
+      "acceptance_criteria": [
+        "All directory structure validates successfully",
+        "package.json files are valid and parseable",
+        "Dependencies install without errors in both projects",
+        ".gitignore contains required patterns"
+      ],
+      "filename": "",
+      "language": "bash"
+    }
+  ]
+}
